@@ -1,0 +1,405 @@
+{
+    "info": {
+      "_postman_id": "a5b7e8f9-c2d4-6e7f-8g9h-0i1j2k3l4m5n",
+      "name": "Product Catalog API",
+      "description": "A collection for testing the Product Catalog API endpoints",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Products",
+        "item": [
+          {
+            "name": "Get All Products",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/api/products/low-stock",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", "low-stock"],
+                "query": [
+                  {
+                    "key": "threshold",
+                    "value": "5",
+                    "description": "Stock threshold",
+                    "disabled": true
+                  }
+                ]
+              },
+              "description": "Get products with low stock"
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Categories",
+        "item": [
+          {
+            "name": "Get All Categories",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories"]
+              },
+              "description": "Retrieve all categories"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Category by ID",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c80",
+                    "description": "Category ID"
+                  }
+                ]
+              },
+              "description": "Retrieve a specific category by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Category",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"parent\": null\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Create a new category"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Subcategory",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Smartphones\",\n  \"description\": \"Mobile phones and accessories\",\n  \"parent\": \"60d21b4667d0d8992e610c80\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Create a new subcategory"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Category",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c80",
+                    "description": "Category ID"
+                  }
+                ]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Electronics & Gadgets\",\n  \"description\": \"Updated description for electronic devices and gadgets\",\n  \"parent\": null\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Update an existing category"
+            },
+            "response": []
+          },
+          {
+            "name": "Delete Category",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c80",
+                    "description": "Category ID"
+                  }
+                ]
+              },
+              "description": "Delete a category"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Products in Category",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id", "products"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c80",
+                    "description": "Category ID"
+                  }
+                ],
+                "query": [
+                  {
+                    "key": "page",
+                    "value": "1",
+                    "disabled": true
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10",
+                    "disabled": true
+                  }
+                ]
+              },
+              "description": "Get all products in a specific category"
+            },
+            "response": []
+          }
+        ]
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "type": "text/javascript",
+          "exec": [""]
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [""]
+        }
+      }
+    ],
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "http://localhost:3000",
+        "type": "string"
+      }
+    ]
+  }baseUrl}}/api/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products"],
+                "query": [
+                  {
+                    "key": "keyword",
+                    "value": "",
+                    "description": "Search by name or description",
+                    "disabled": true
+                  },
+                  {
+                    "key": "category",
+                    "value": "",
+                    "description": "Filter by category ID",
+                    "disabled": true
+                  },
+                  {
+                    "key": "minPrice",
+                    "value": "",
+                    "description": "Minimum price",
+                    "disabled": true
+                  },
+                  {
+                    "key": "maxPrice",
+                    "value": "",
+                    "description": "Maximum price",
+                    "disabled": true
+                  },
+                  {
+                    "key": "inStock",
+                    "value": "true",
+                    "description": "Filter by availability",
+                    "disabled": true
+                  },
+                  {
+                    "key": "page",
+                    "value": "1",
+                    "description": "Page number",
+                    "disabled": true
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10",
+                    "description": "Items per page",
+                    "disabled": true
+                  },
+                  {
+                    "key": "sortBy",
+                    "value": "price:asc",
+                    "description": "Sort by field:order",
+                    "disabled": true
+                  }
+                ]
+              },
+              "description": "Retrieve all products with optional filtering, sorting, and pagination"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Product by ID",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c85",
+                    "description": "Product ID"
+                  }
+                ]
+              },
+              "description": "Retrieve a specific product by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Product",
+            "request": {
+              "method": "POST",
+              "url": {
+                "raw": "{{baseUrl}}/api/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Smartphone X\",\n  \"description\": \"Latest smartphone with amazing features\",\n  \"sku\": \"PHONE-X-128\",\n  \"price\": 799.99,\n  \"discountPercentage\": 10,\n  \"stockCount\": 25,\n  \"categories\": [],\n  \"variants\": [\n    {\n      \"name\": \"128GB Black\",\n      \"sku\": \"PHONE-X-128B\",\n      \"additionalCost\": 0,\n      \"stockCount\": 15\n    },\n    {\n      \"name\": \"256GB Black\",\n      \"sku\": \"PHONE-X-256B\",\n      \"additionalCost\": 100,\n      \"stockCount\": 10\n    }\n  ],\n  \"attributes\": {\n    \"brand\": \"TechCo\",\n    \"color\": \"Black\",\n    \"weight\": \"180g\"\n  }\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Create a new product"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Product",
+            "request": {
+              "method": "PUT",
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c85",
+                    "description": "Product ID"
+                  }
+                ]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Smartphone X Pro\",\n  \"description\": \"Updated smartphone with even more features\",\n  \"sku\": \"PHONE-X-128\",\n  \"price\": 899.99,\n  \"discountPercentage\": 5,\n  \"stockCount\": 30,\n  \"categories\": [],\n  \"variants\": [\n    {\n      \"name\": \"128GB Black\",\n      \"sku\": \"PHONE-X-128B\",\n      \"additionalCost\": 0,\n      \"stockCount\": 20\n    },\n    {\n      \"name\": \"256GB Black\",\n      \"sku\": \"PHONE-X-256B\",\n      \"additionalCost\": 100,\n      \"stockCount\": 10\n    }\n  ],\n  \"attributes\": {\n    \"brand\": \"TechCo\",\n    \"color\": \"Black\",\n    \"weight\": \"180g\"\n  }\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Update an existing product"
+            },
+            "response": []
+          },
+          {
+            "name": "Delete Product",
+            "request": {
+              "method": "DELETE",
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c85",
+                    "description": "Product ID"
+                  }
+                ]
+              },
+              "description": "Delete a product"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Inventory",
+            "request": {
+              "method": "PATCH",
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id/inventory",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id", "inventory"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "60d21b4667d0d8992e610c85",
+                    "description": "Product ID"
+                  }
+                ]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"stockCount\": 40\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "description": "Update product inventory"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Low Stock Products",
+            "request": {
+              "method": "GET",
+              "url": {
+                "raw": "{{
