@@ -54,3 +54,8 @@ const server = app.listen(PORT, () => {
 
 // For testing purposes
 module.exports = { app, server };
+
+// Add error middleware
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+app.use(notFound);
+app.use(errorHandler);
