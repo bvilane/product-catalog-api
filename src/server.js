@@ -18,6 +18,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Import routes
+const productRoutes = require('./routes/productRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+
+// Mount routes
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+
 // Logger
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
