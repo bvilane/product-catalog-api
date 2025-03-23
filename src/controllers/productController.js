@@ -78,12 +78,33 @@ const getProducts = async (req, res, next) => {
       queryObj.stockCount = { $gt: 0 };
     }
     
+    // ENHANCED SEARCH FUNCTIONALITY
     // Search by keyword (name or description)
     if (req.query.keyword) {
       queryObj.$or = [
         { name: { $regex: req.query.keyword, $options: 'i' } },
         { description: { $regex: req.query.keyword, $options: 'i' } },
+        // Search in attributes
+        { "attributes.brand": { $regex: req.query.keyword, $options: 'i' } },
+        { "attributes.color": { $regex: req.query.keyword, $options: 'i' } },
       ];
+    }
+
+    // Add filter by discount
+    if (req.query.hasDiscount === 'true') {
+      queryObj.discountPercentage = { $gt: 0 };
+    }
+
+    // Filter by price range with more flexibility
+    if (req.query.priceRange) {
+      const ranges = {
+        'budget': { $lte: 100 },
+        'mid-range': { $gt: 100, $lte: 500 },
+        'premium': { $gt: 500 }
+      };
+      if (ranges[req.query.priceRange]) {
+        queryObj.price = ranges[req.query.priceRange];
+      }
     }
 
     // Pagination

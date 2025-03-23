@@ -9,18 +9,20 @@ const {
   getLowStockProducts,
 } = require('../controllers/productController');
 const { validateProduct } = require('../middleware/validationMiddleware');
+const { shortCache } = require('../middleware/cacheMiddleware');
 
 const router = express.Router();
 
+// Apply caching to GET requests
 router.route('/')
-  .get(getProducts)
+  .get(shortCache, getProducts)
   .post(validateProduct, createProduct);
 
 router.route('/low-stock')
-  .get(getLowStockProducts);
+  .get(shortCache, getLowStockProducts);
 
 router.route('/:id')
-  .get(getProductById)
+  .get(shortCache, getProductById)
   .put(validateProduct, updateProduct)
   .delete(deleteProduct);
 
