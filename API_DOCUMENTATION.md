@@ -324,4 +324,343 @@ Updates the inventory (stock count) of a product.
 ```json
 {
   "id": "60d21b4667d0d8992e610c85",
-  "name": "Smartphone X
+  "name": "Smartphone X",
+  "stockCount": 30
+}
+```
+
+### Get Low Stock Products
+
+Retrieves products with stock count below a specified threshold.
+
+**Endpoint:** `GET /api/products/low-stock`
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `threshold` | number | Stock threshold (default: 5) |
+
+**Response:**
+
+```json
+[
+  {
+    "_id": "60d21b4667d0d8992e610c90",
+    "name": "Wireless Earbuds",
+    "sku": "EARBUDS-01",
+    "stockCount": 3,
+    "price": 129.99
+  },
+  {
+    "_id": "60d21b4667d0d8992e610c91",
+    "name": "Smart Watch",
+    "sku": "WATCH-02",
+    "stockCount": 2,
+    "price": 199.99
+  }
+]
+```
+
+## Category Endpoints
+
+### Get All Categories
+
+Retrieves all categories.
+
+**Endpoint:** `GET /api/categories`
+
+**Response:**
+
+```json
+[
+  {
+    "_id": "60d21b4667d0d8992e610c80",
+    "name": "Electronics",
+    "description": "Electronic devices and gadgets",
+    "parent": null,
+    "createdAt": "2023-03-20T15:30:45.123Z",
+    "updatedAt": "2023-03-20T15:30:45.123Z"
+  },
+  {
+    "_id": "60d21b4667d0d8992e610c81",
+    "name": "Smartphones",
+    "description": "Mobile phones and accessories",
+    "parent": {
+      "_id": "60d21b4667d0d8992e610c80",
+      "name": "Electronics"
+    },
+    "createdAt": "2023-03-20T15:30:45.123Z",
+    "updatedAt": "2023-03-20T15:30:45.123Z"
+  }
+]
+```
+
+### Get Category by ID
+
+Retrieves a single category by its ID.
+
+**Endpoint:** `GET /api/categories/:id`
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Category ID |
+
+**Response:**
+
+```json
+{
+  "_id": "60d21b4667d0d8992e610c81",
+  "name": "Smartphones",
+  "description": "Mobile phones and accessories",
+  "parent": {
+    "_id": "60d21b4667d0d8992e610c80",
+    "name": "Electronics"
+  },
+  "createdAt": "2023-03-20T15:30:45.123Z",
+  "updatedAt": "2023-03-20T15:30:45.123Z"
+}
+```
+
+### Create Category
+
+Creates a new category.
+
+**Endpoint:** `POST /api/categories`
+
+**Request Body:**
+
+```json
+{
+  "name": "Laptops",
+  "description": "Notebook computers and accessories",
+  "parent": "60d21b4667d0d8992e610c80"
+}
+```
+
+**Required Fields:**
+- `name`: Category name (must be unique)
+- `description`: Category description
+
+**Optional Fields:**
+- `parent`: Parent category ID (for subcategories)
+- `isActive`: Boolean indicating if category is active (default: true)
+
+**Response:**
+
+```json
+{
+  "_id": "60d21b4667d0d8992e610c82",
+  "name": "Laptops",
+  "description": "Notebook computers and accessories",
+  "parent": "60d21b4667d0d8992e610c80",
+  "isActive": true,
+  "createdAt": "2023-03-20T15:30:45.123Z",
+  "updatedAt": "2023-03-20T15:30:45.123Z"
+}
+```
+
+### Update Category
+
+Updates an existing category.
+
+**Endpoint:** `PUT /api/categories/:id`
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Category ID |
+
+**Request Body:**
+Same as for creating a category. All fields are optional for updates.
+
+**Response:**
+Returns the updated category object.
+
+### Delete Category
+
+Deletes a category.
+
+**Endpoint:** `DELETE /api/categories/:id`
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Category ID |
+
+**Response:**
+
+```json
+{
+  "message": "Category removed"
+}
+```
+
+**Error Cases:**
+- If the category is used by any products, deletion will fail
+- If the category is a parent to other categories, deletion will fail
+
+### Get Products in Category
+
+Retrieves all products in a specific category.
+
+**Endpoint:** `GET /api/categories/:id/products`
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Category ID |
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | number | Page number for pagination (default: 1) |
+| `limit` | number | Number of items per page (default: 10) |
+
+**Response:**
+
+```json
+{
+  "category": {
+    "id": "60d21b4667d0d8992e610c81",
+    "name": "Smartphones"
+  },
+  "products": [
+    {
+      "_id": "60d21b4667d0d8992e610c85",
+      "name": "Smartphone X",
+      "description": "Latest smartphone with amazing features",
+      "price": 799.99,
+      "finalPrice": 719.99,
+      "stockCount": 25
+    },
+    {
+      "_id": "60d21b4667d0d8992e610c86",
+      "name": "Smartphone Y",
+      "description": "Budget-friendly smartphone",
+      "price": 399.99,
+      "finalPrice": 399.99,
+      "stockCount": 50
+    }
+  ],
+  "page": 1,
+  "pages": 1,
+  "total": 2
+}
+```
+
+## Error Responses
+
+### Validation Error
+
+```json
+{
+  "message": "\"name\" is required"
+}
+```
+
+### Resource Not Found
+
+```json
+{
+  "message": "Product not found"
+}
+```
+
+### Conflict Error
+
+```json
+{
+  "message": "Product with this SKU already exists"
+}
+```
+
+### Deletion Constraint Error
+
+```json
+{
+  "message": "Cannot delete category. It is used by 5 products."
+}
+```
+
+## Example Use Cases
+
+### Creating a Product Catalog Structure
+
+1. Create parent categories:
+   ```
+   POST /api/categories
+   { "name": "Electronics", "description": "Electronic devices" }
+   ```
+
+2. Create subcategories:
+   ```
+   POST /api/categories
+   { "name": "Smartphones", "description": "Mobile phones", "parent": "PARENT_ID" }
+   ```
+
+3. Add products to categories:
+   ```
+   POST /api/products
+   { 
+     "name": "Phone XYZ", 
+     "description": "...", 
+     "sku": "PHONE-123", 
+     "price": 499.99,
+     "stockCount": 50,
+     "categories": ["CATEGORY_ID"] 
+   }
+   ```
+
+### Managing Inventory
+
+1. Check low stock items:
+   ```
+   GET /api/products/low-stock?threshold=10
+   ```
+
+2. Update inventory for a product:
+   ```
+   PATCH /api/products/PRODUCT_ID/inventory
+   { "stockCount": 100 }
+   ```
+
+### Searching and Filtering Products
+
+1. Search products by keyword:
+   ```
+   GET /api/products?keyword=smartphone
+   ```
+
+2. Filter products by category:
+   ```
+   GET /api/products?category=CATEGORY_ID
+   ```
+
+3. Filter products by price range:
+   ```
+   GET /api/products?minPrice=100&maxPrice=500
+   ```
+
+4. Combined search, filter, and sort:
+   ```
+   GET /api/products?keyword=smartphone&minPrice=300&maxPrice=800&sortBy=price:asc&page=1&limit=10
+   ```
+
+## Rate Limits
+
+This version of the API does not implement rate limiting. Future versions may include rate limits to prevent abuse.
+
+## Versioning
+
+The current API version is v1. The version is implied in the paths but not explicitly stated.
+
+## Support
+
+For support or questions about the API, please open an issue on the GitHub repository.
