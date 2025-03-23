@@ -6,11 +6,14 @@ A RESTful API for a product catalog system built with Node.js and Express.js. Th
 
 - **Product Management**: Create, read, update, and delete products
 - **Category Management**: Organize products into categories with parent-child relationships
-- **Search & Filtering**: Find products by name, description, category, price range, etc.
+- **Search & Filtering**: Advanced search by name, description, attributes, price ranges, and more
 - **Variant Support**: Manage product variants with different attributes (size, color, etc.)
 - **Inventory Tracking**: Keep track of stock for products and variants
 - **Pricing & Discounts**: Set prices and apply discounts to products
 - **Reporting**: Generate reports for low stock items
+- **Authentication & Authorization**: JWT-based authentication with user roles
+- **Rate Limiting**: Protection against API abuse
+- **Performance Optimization**: Response caching for improved performance
 
 ## Prerequisites
 
@@ -23,7 +26,7 @@ A RESTful API for a product catalog system built with Node.js and Express.js. Th
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/your-username/product-catalog-api.git
+git clone https://github.com/bvilane/product-catalog-api.git
 cd product-catalog-api
 ```
 
@@ -41,6 +44,7 @@ Create a `.env` file in the root directory with the following variables:
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/product-catalog
 NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key
 ```
 
 4. **Start the server**
@@ -55,349 +59,93 @@ npm start
 
 ## API Documentation
 
-### Products
+For detailed documentation of all API endpoints, see [API_DOCUMENTATION.md](./API_DOCUMENTATION.md).
 
-#### Get all products
-- **URL**: `/api/products`
-- **Method**: `GET`
-- **URL Params**:
-  - `keyword=[string]` - Search by name or description
-  - `category=[id]` - Filter by category ID
-  - `minPrice=[number]` - Minimum price filter
-  - `maxPrice=[number]` - Maximum price filter
-  - `inStock=[boolean]` - Filter by availability
-  - `page=[number]` - Page number for pagination (default: 1)
-  - `limit=[number]` - Results per page (default: 10)
-  - `sortBy=[field:order]` - Sort by field (e.g., `price:asc`, `name:desc`)
-- **Success Response**: `200 OK`
-```json
-{
-  "products": [
-    {
-      "_id": "60d21b4667d0d8992e610c85",
-      "name": "Smartphone X",
-      "description": "Latest smartphone with amazing features",
-      "price": 799.99,
-      "finalPrice": 719.99,
-      "discountPercentage": 10,
-      "stockCount": 25,
-      "categories": [
-        {
-          "_id": "60d21b4667d0d8992e610c80",
-          "name": "Electronics"
-        }
-      ],
-      "createdAt": "2023-03-20T15:30:45.123Z",
-      "updatedAt": "2023-03-20T15:30:45.123Z"
-    },
-    // More products...
-  ],
-  "page": 1,
-  "pages": 5,
-  "total": 48
-}
-```
+### Main Features
 
-#### Get a single product
-- **URL**: `/api/products/:id`
-- **Method**: `GET`
-- **URL Params**: None
-- **Success Response**: `200 OK`
-```json
-{
-  "_id": "60d21b4667d0d8992e610c85",
-  "name": "Smartphone X",
-  "description": "Latest smartphone with amazing features",
-  "sku": "PHONE-X-128",
-  "price": 799.99,
-  "finalPrice": 719.99,
-  "discountPercentage": 10,
-  "stockCount": 25,
-  "categories": [
-    {
-      "_id": "60d21b4667d0d8992e610c80",
-      "name": "Electronics",
-      "description": "Electronic devices and gadgets"
-    }
-  ],
-  "variants": [
-    {
-      "_id": "60d21b4667d0d8992e610c86",
-      "name": "128GB Black",
-      "sku": "PHONE-X-128B",
-      "additionalCost": 0,
-      "stockCount": 15
-    },
-    {
-      "_id": "60d21b4667d0d8992e610c87",
-      "name": "256GB Black",
-      "sku": "PHONE-X-256B",
-      "additionalCost": 100,
-      "stockCount": 10
-    }
-  ],
-  "attributes": {
-    "brand": "TechCo",
-    "color": "Black",
-    "weight": "180g"
-  },
-  "createdAt": "2023-03-20T15:30:45.123Z",
-  "updatedAt": "2023-03-20T15:30:45.123Z"
-}
-```
+#### Products API
+- Create, read, update, and delete products
+- Search products by keywords
+- Filter by category, price range, availability
+- Manage product variants
+- Update inventory
+- Get low stock reports
 
-#### Create a product
-- **URL**: `/api/products`
-- **Method**: `POST`
-- **Body**:
-```json
-{
-  "name": "Smartphone X",
-  "description": "Latest smartphone with amazing features",
-  "sku": "PHONE-X-128",
-  "price": 799.99,
-  "discountPercentage": 10,
-  "stockCount": 25,
-  "categories": ["60d21b4667d0d8992e610c80"],
-  "variants": [
-    {
-      "name": "128GB Black",
-      "sku": "PHONE-X-128B",
-      "additionalCost": 0,
-      "stockCount": 15
-    },
-    {
-      "name": "256GB Black",
-      "sku": "PHONE-X-256B",
-      "additionalCost": 100,
-      "stockCount": 10
-    }
-  ],
-  "attributes": {
-    "brand": "TechCo",
-    "color": "Black",
-    "weight": "180g"
-  }
-}
-```
-- **Success Response**: `201 Created`
-- **Error Response**: `400 Bad Request` if validation fails
+#### Categories API
+- Create, read, update, and delete categories
+- Support for hierarchical categories
+- Retrieve products by category
 
-#### Update a product
-- **URL**: `/api/products/:id`
-- **Method**: `PUT`
-- **Body**: Same as for creating a product
-- **Success Response**: `200 OK`
-- **Error Response**: `404 Not Found` if product doesn't exist
+#### Authentication API
+- User registration and login
+- JWT-based authentication
+- Protected routes
+- Role-based authorization
 
-#### Delete a product
-- **URL**: `/api/products/:id`
-- **Method**: `DELETE`
-- **Success Response**: `200 OK`
-```json
-{
-  "message": "Product removed"
-}
-```
-- **Error Response**: `404 Not Found` if product doesn't exist
+## Security Features
 
-#### Update product inventory
-- **URL**: `/api/products/:id/inventory`
-- **Method**: `PATCH`
-- **Body**:
-```json
-{
-  "stockCount": 30
-}
-```
-- **Success Response**: `200 OK`
-```json
-{
-  "id": "60d21b4667d0d8992e610c85",
-  "name": "Smartphone X",
-  "stockCount": 30
-}
-```
+- Input validation and sanitization
+- JWT authentication for protected routes
+- Rate limiting to prevent abuse
+- CORS configuration
+- Error handling with appropriate status codes
 
-#### Get low stock products
-- **URL**: `/api/products/low-stock`
-- **Method**: `GET`
-- **URL Params**:
-  - `threshold=[number]` - Stock threshold (default: 5)
-- **Success Response**: `200 OK`
-```json
-[
-  {
-    "_id": "60d21b4667d0d8992e610c90",
-    "name": "Wireless Earbuds",
-    "sku": "EARBUDS-01",
-    "stockCount": 3,
-    "price": 129.99
-  },
-  // More low stock products...
-]
-```
+## Performance Optimizations
 
-### Categories
-
-#### Get all categories
-- **URL**: `/api/categories`
-- **Method**: `GET`
-- **Success Response**: `200 OK`
-```json
-[
-  {
-    "_id": "60d21b4667d0d8992e610c80",
-    "name": "Electronics",
-    "description": "Electronic devices and gadgets",
-    "parent": null,
-    "createdAt": "2023-03-20T15:30:45.123Z",
-    "updatedAt": "2023-03-20T15:30:45.123Z"
-  },
-  {
-    "_id": "60d21b4667d0d8992e610c81",
-    "name": "Smartphones",
-    "description": "Mobile phones and accessories",
-    "parent": {
-      "_id": "60d21b4667d0d8992e610c80",
-      "name": "Electronics"
-    },
-    "createdAt": "2023-03-20T15:30:45.123Z",
-    "updatedAt": "2023-03-20T15:30:45.123Z"
-  },
-  // More categories...
-]
-```
-
-#### Get a single category
-- **URL**: `/api/categories/:id`
-- **Method**: `GET`
-- **Success Response**: `200 OK`
-```json
-{
-  "_id": "60d21b4667d0d8992e610c81",
-  "name": "Smartphones",
-  "description": "Mobile phones and accessories",
-  "parent": {
-    "_id": "60d21b4667d0d8992e610c80",
-    "name": "Electronics"
-  },
-  "createdAt": "2023-03-20T15:30:45.123Z",
-  "updatedAt": "2023-03-20T15:30:45.123Z"
-}
-```
-
-#### Create a category
-- **URL**: `/api/categories`
-- **Method**: `POST`
-- **Body**:
-```json
-{
-  "name": "Laptops",
-  "description": "Notebook computers and accessories",
-  "parent": "60d21b4667d0d8992e610c80"
-}
-```
-- **Success Response**: `201 Created`
-- **Error Response**: `400 Bad Request` if validation fails
-
-#### Update a category
-- **URL**: `/api/categories/:id`
-- **Method**: `PUT`
-- **Body**: Same as for creating a category
-- **Success Response**: `200 OK`
-- **Error Response**: `404 Not Found` if category doesn't exist
-
-#### Delete a category
-- **URL**: `/api/categories/:id`
-- **Method**: `DELETE`
-- **Success Response**: `200 OK`
-```json
-{
-  "message": "Category removed"
-}
-```
-- **Error Response**: 
-  - `404 Not Found` if category doesn't exist
-  - `400 Bad Request` if category is used by products or has child categories
-
-#### Get products in a category
-- **URL**: `/api/categories/:id/products`
-- **Method**: `GET`
-- **URL Params**:
-  - `page=[number]` - Page number for pagination (default: 1)
-  - `limit=[number]` - Results per page (default: 10)
-- **Success Response**: `200 OK`
-```json
-{
-  "category": {
-    "id": "60d21b4667d0d8992e610c81",
-    "name": "Smartphones"
-  },
-  "products": [
-    {
-      "_id": "60d21b4667d0d8992e610c85",
-      "name": "Smartphone X",
-      "description": "Latest smartphone with amazing features",
-      "price": 799.99,
-      "finalPrice": 719.99,
-      "stockCount": 25
-    },
-    // More products...
-  ],
-  "page": 1,
-  "pages": 2,
-  "total": 15
-}
-```
-
-## Error Handling
-
-The API returns appropriate HTTP status codes and error messages for different scenarios:
-
-- `400 Bad Request`: Invalid input data or operation
-- `404 Not Found`: Resource doesn't exist
-- `500 Internal Server Error`: Server-side errors
-
-Error response format:
-```json
-{
-  "message": "Detailed error message"
-}
-```
+- Response caching for frequently accessed data
+- Efficient database queries with proper indexing
+- Pagination for large dataset handling
 
 ## Testing
 
-Run the test suite with:
+Run the automated test suite with:
 
 ```bash
 npm test
 ```
 
-The tests cover all API endpoints and include:
-- Validation tests
-- CRUD operations for products and categories
-- Search and filtering functionality
-- Error handling scenarios
+The tests cover:
+- API endpoints functionality
+- Authentication and authorization
+- Data validation
+- Error handling
 
-## Extensions and Improvements
+## Project Structure
 
-The API can be extended with the following features:
-
-- **Authentication & Authorization**: Implement JWT-based auth with user roles
-- **Rate Limiting**: Protect the API from abuse
-- **Database Integration**: Connect to a persistent MongoDB database
-- **Image Handling**: Add support for product images
-- **Performance Optimization**: Implement caching and query optimization
-- **Extended Search**: Add full-text search capabilities
+```
+product-catalog-api/
+│
+├── src/                    # Source code
+│   ├── config/             # Configuration files
+│   ├── controllers/        # Route controllers
+│   ├── middleware/         # Custom middleware
+│   ├── models/             # Mongoose models
+│   ├── routes/             # API routes
+│   ├── utils/              # Utility functions
+│   └── server.js           # Main server file
+│
+├── tests/                  # Test files
+│
+├── .env                    # Environment variables (create this)
+├── .gitignore              # Git ignore file
+├── package.json            # Project dependencies and scripts
+├── README.md               # Project documentation
+├── API_DOCUMENTATION.md    # Detailed API documentation
+├── PROJECT_SETUP.md        # Setup instructions
+└── Product Catalog API.postman_collection.json  # Postman collection
+```
 
 ## Assumptions and Limitations
 
-- The API currently uses in-memory storage which resets on server restart (in development mode)
-- No authentication or authorization is implemented in this version
-- The API assumes all requests are in JSON format
-- Rate limiting is not implemented in this version
+- JWT tokens expire after 30 days
+- Rate limiting is set to 100 requests per 15 minutes for general API endpoints
+- Authentication endpoints are limited to 5 requests per hour per IP
+- Response caching durations vary from 2 minutes to 1 hour depending on the endpoint
 
-## Author 
+## Author
 
 Bavukile Birthwell Vilane - b.vilane@alustudent.com - https://github.com/bvilane
+
+## License
+
+MIT
