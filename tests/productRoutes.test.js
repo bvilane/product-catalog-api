@@ -27,9 +27,11 @@ beforeEach(async () => {
 
 // Disconnect from test database after tests
 afterAll(async () => {
-  await disconnectTestDB();
-  server.close();
-});
+    await disconnectTestDB();
+    if (server && server.close) {
+      server.close();
+    }
+  }, 10000);
 
 describe('Product API Tests', () => {
   // Create Product Test
