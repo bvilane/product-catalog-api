@@ -9,7 +9,7 @@ const apiLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-// More strict rate limiting for auth endpoints
+// Strict rate limiting for auth endpoints
 const authLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // limit each IP to 5 login requests per hour
